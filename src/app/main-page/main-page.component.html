@@ -1,0 +1,28 @@
+<h1>Your todo list</h1>
+<div class="task-block">
+  <input class="task-input" placeholder="Enter your task name here" [(ngModel)]="currentTaskName" (keyup.enter)="addNewTask()">
+  <div class="task-list" *ngIf="!(isDataLoad$ | async)">
+    <app-task-item-skeleton *ngFor="let task of taskTemplate"></app-task-item-skeleton>
+  </div>
+  <div class="task-list">
+    <app-task-item *ngFor="let task of filteredTasks$ | async" [task]="task"></app-task-item>
+  </div>
+  <div class="task-bottom" *ngIf="((taskCount$ | async) !== 0) || !(isDataLoad$ | async)">
+    <div class="task-left" (click)="selectAllTasks()">{{tasksLeftCount$ | async}} tasks left</div>
+    <div class="task-radio">
+      <label for="filter-all">
+        <input id="filter-all" type="radio" name="filter" [checked]="true" (click)="changeOptions(filterType.all)">
+        <span>All</span>
+      </label>
+      <label for="filter-todo">
+        <input id="filter-todo" type="radio" name="filter" (click)="changeOptions(filterType.active)">
+        <span>ToDo</span>
+      </label>
+      <label for="filter-completed">
+        <input id="filter-completed" type="radio" name="filter" (click)="changeOptions(filterType.completed)">
+        <span>Completed</span>
+      </label>
+    </div>
+    <div *ngIf="(tasksLeftCount$ | async) !== (taskCount$ | async)" class="task-clear" (click)="clearCompletedTasks()">Clear completed</div>
+  </div>
+</div>
