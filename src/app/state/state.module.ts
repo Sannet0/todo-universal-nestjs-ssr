@@ -4,11 +4,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers } from './state.model';
 import { EffectsModule } from '@ngrx/effects';
 import { TasksEffects } from './tasks/tasks.effects';
+import { ListEffect } from './lists/list.effect';
 
 @NgModule({
   imports: [
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([TasksEffects]),
+    EffectsModule.forRoot([TasksEffects, ListEffect]),
     StoreDevtoolsModule.instrument({}),
   ]
 })

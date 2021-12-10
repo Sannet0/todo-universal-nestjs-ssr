@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ITask } from '../interface/task-interface';
 import { FilterType, TaskService } from '../services/task.service';
 import { AppService } from '../services/app.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -20,16 +21,18 @@ export class MainPageComponent implements OnInit {
   taskCount$ = this.taskService.taskCount$;
   tasksLeftCount$ = this.taskService.tasksLeftCount$;
   filteredTasks$ = this.taskService.filteredTasks$;
+  listId: number = this.actRoute.snapshot.params.listId;
 
   constructor(
     private taskService: TaskService,
     private appService: AppService,
+    private actRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   addNewTask(): void {
     if (this.currentTaskName.trim()) {
-      this.taskService.addNew(this.currentTaskName);
+      this.taskService.addNew(this.currentTaskName, this.listId);
     }
     this.currentTaskName = '';
   }
@@ -40,12 +43,12 @@ export class MainPageComponent implements OnInit {
 
 
   selectAllTasks(): void {
-    this.taskService.selectAll();
+    this.taskService.selectAll(this.listId);
   }
 
   clearCompletedTasks(): void {
     this.taskService.setFilterType(FilterType.all);
-    this.taskService.deleteCompleted();
+    this.taskService.deleteCompleted(this.listId);
   }
 
   ngOnInit() {
@@ -55,7 +58,7 @@ export class MainPageComponent implements OnInit {
   }
 
   onInitOnBrowser() {
-    this.taskService.loadAll();
+    this.taskService.loadAll(this.listId);
     this.isDataLoad = true;
   }
 }

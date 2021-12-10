@@ -4,8 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppServerModule } from '../src/main.server';
 import { TasksModule } from './tasks/tasks.module';
-import { Task } from './entitys/task.entity';
 import { TaskModule } from './task/task.module';
+import { UserModule } from './user/user.module';
+import { Task } from './entitys/task.entity';
+import { User } from './entitys/user.entity';
+import { List } from './entitys/list.entity';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -16,7 +20,7 @@ import { TaskModule } from './task/task.module';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [Task],
+      entities: [Task, User, List],
       synchronize: true,
       autoLoadEntities: true,
     }),
@@ -26,6 +30,8 @@ import { TaskModule } from './task/task.module';
     }),
     TaskModule,
     TasksModule,
+    UserModule,
+    ListModule
   ],
 })
 export class AppModule {

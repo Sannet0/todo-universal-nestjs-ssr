@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as TaskActions from './tasks.actions';
 import * as AppActions from '../app/app.actions';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../../services/api.service';
-
-// AppActions.changeLoadStatus({ isDataLoad: true })
 
 @Injectable()
 export class TasksEffects {
@@ -16,8 +14,8 @@ export class TasksEffects {
 
   loadTasks$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.loadTasks),
-    mergeMap(() =>
-      this.apiService.loadAllTasks().pipe(
+    mergeMap(({ listId }) =>
+      this.apiService.loadAllTasks(listId).pipe(
         mergeMap((tasks) => [
           TaskActions.loadTasksSuccess({ tasks }),
           AppActions.changeLoadStatus({ isDataLoad: true })
@@ -28,7 +26,8 @@ export class TasksEffects {
 
   newTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.addTask),
-    mergeMap(({ text }) => this.apiService.addNewTask(text).pipe(
+    mergeMap(({ text, listId }) =>
+      this.apiService.addNewTask(text, listId).pipe(
         map(task => TaskActions.addTaskSuccess({ task }))
       )
     )
@@ -36,7 +35,8 @@ export class TasksEffects {
 
   changeTaskStatus$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.changeTaskStatus),
-    mergeMap(({ id, isCompleted }) => this.apiService.changeTaskStatus(id, isCompleted).pipe(
+    mergeMap(({ id, isCompleted }) =>
+      this.apiService.changeTaskStatus(id, isCompleted).pipe(
         map(() => TaskActions.changeTaskStatusSuccess({ id, isCompleted }))
       )
     )
@@ -44,7 +44,8 @@ export class TasksEffects {
 
   deleteTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTask),
-    mergeMap(({ id }) => this.apiService.deleteTask(id).pipe(
+    mergeMap(({ id }) =>
+      this.apiService.deleteTask(id).pipe(
         map(() => TaskActions.deleteTaskSuccess({ id }))
       )
     )
@@ -52,7 +53,8 @@ export class TasksEffects {
 
   deleteCompleteTasks$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteCompletedTask),
-    mergeMap(() => this.apiService.deleteCompleteTasks().pipe(
+    mergeMap(({ listId }) =>
+      this.apiService.deleteCompleteTasks(listId).pipe(
         map(() => TaskActions.deleteCompletedTaskSuccess())
       )
     )
@@ -60,7 +62,8 @@ export class TasksEffects {
 
   completeAllTasks$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.selectAllTask),
-    mergeMap(() => this.apiService.completeAllTasks().pipe(
+    mergeMap(({ listId }) =>
+      this.apiService.completeAllTasks(listId).pipe(
         map(() => TaskActions.selectAllTaskSuccess())
       )
     )

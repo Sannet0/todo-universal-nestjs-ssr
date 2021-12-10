@@ -1,0 +1,7 @@
+<p>
+    <button (click)="logOut()">LOG OUT</button>
+</p>
+<app-list-item *ngFor="let list of lists$ | async" [listId]="list.id" [title]="list.title"></app-list-item>
+<p>
+    <button (click)="addNew()">add new list</button>
+</p>

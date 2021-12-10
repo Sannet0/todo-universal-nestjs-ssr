@@ -2,7 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import { ITask } from '../../interface/task-interface';
 
 export const loadTasks = createAction(
-  '[Tasks] Load tasks'
+  '[Tasks] Load tasks',
+  props<{ listId: number }>()
 );
 
 export const loadTasksSuccess = createAction(
@@ -12,7 +13,7 @@ export const loadTasksSuccess = createAction(
 
 export const addTask = createAction(
   '[Tasks] Add task',
-  props<{ text: string }>()
+  props<{ text: string, listId: number }>()
 );
 
 export const addTaskSuccess = createAction(
@@ -41,7 +42,8 @@ export const deleteTaskSuccess = createAction(
 );
 
 export const selectAllTask = createAction(
-  '[Tasks] Select all task'
+  '[Tasks] Select all task',
+  props<{ listId: number }>()
 );
 
 export const selectAllTaskSuccess = createAction(
@@ -49,7 +51,8 @@ export const selectAllTaskSuccess = createAction(
 );
 
 export const deleteCompletedTask = createAction(
-  '[Tasks] Delete all completed task'
+  '[Tasks] Delete all completed task',
+  props<{ listId: number }>()
 );
 
 export const deleteCompletedTaskSuccess = createAction(

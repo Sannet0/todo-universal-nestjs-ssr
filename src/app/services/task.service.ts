@@ -24,7 +24,7 @@ export enum FilterType {
   providedIn: 'root'
 })
 export class TaskService {
-  constructor(private apiService: ApiService, private store: Store<{ tasks: ITask[] }>) {
+  constructor(private store: Store<{ tasks: ITask[] }>) {
   }
 
   private filterType$ = new BehaviorSubject<FilterType>(FilterType.all);
@@ -41,12 +41,12 @@ export class TaskService {
   );
 
 
-  loadAll(): void {
-    this.store.dispatch(loadTasks());
+  loadAll(listId: number): void {
+    this.store.dispatch(loadTasks({ listId }));
   }
 
-  addNew(text: string): void {
-    this.store.dispatch(addTask({ text }));
+  addNew(text: string, listId: number): void {
+    this.store.dispatch(addTask({ text, listId }));
   }
 
   changeStatus(id: number, isCompleted: boolean): void {
@@ -57,12 +57,12 @@ export class TaskService {
     this.store.dispatch(deleteTask({ id }));
   }
 
-  selectAll(): void {
-    this.store.dispatch(selectAllTask());
+  selectAll(listId: number): void {
+    this.store.dispatch(selectAllTask({ listId }));
   }
 
-  deleteCompleted(): void {
-    this.store.dispatch(deleteCompletedTask());
+  deleteCompleted(listId: number): void {
+    this.store.dispatch(deleteCompletedTask({ listId }));
   }
 
   private filterTasksExpression(task: ITask, type: FilterType): boolean {

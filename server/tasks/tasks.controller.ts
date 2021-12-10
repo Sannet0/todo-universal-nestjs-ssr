@@ -1,22 +1,24 @@
-import { Controller, Delete, Get, Patch } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { JwtGuard } from '../guards/jwt.guard';
 
-@Controller('tasks')
+@UseGuards(JwtGuard)
+@Controller('list/:listId/tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getAll() {
-    return this.tasksService.getAllTasks();
+  getAll(@Param() param: { listId: string }, @Req() req: any) {
+    return this.tasksService.getAllTasks(param.listId, req.user.id);
   }
 
   @Delete("complete")
-  deleteCompleted() {
-    return this.tasksService.deleteCompletedTask();
+  deleteCompleted(@Param() param: { listId: string }, @Req() req: any) {
+    return this.tasksService.deleteCompletedTask(param.listId, req.user.id);
   }
 
   @Patch("all")
-  setAllComplete(){
-    return this.tasksService.setAllComplete();
+  setAllComplete(@Param() param: { listId: string }, @Req() req: any){
+    return this.tasksService.setAllComplete(param.listId, req.user.id);
   }
 }

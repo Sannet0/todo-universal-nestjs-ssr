@@ -1,0 +1,39 @@
+<div *ngIf="!isRegistration">
+  <p>login</p>
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <p>
+      <label for="login-login">Login: </label>
+      <input id="login-login" formControlName="login">
+    </p>
+    <p>
+      <label for="login-password">Password: </label>
+      <input id="login-password" formControlName="password">
+    </p>
+    <button type="submit">Login</button>
+  </form>
+  <p>
+    <button (click)="setIsRegistration(true)">to Registration</button>
+  </p>
+</div>
+<div *ngIf="isRegistration">
+  <p>registration</p>
+  <form class="registration-form" [formGroup]="registrationForm" (ngSubmit)="registration()">
+    <p>
+      <label for="registration-login">Login: </label>
+      <input id="registration-login" formControlName="login">
+    </p>
+    <p>
+      <label for="registration-password">Password: </label>
+      <input id="registration-password" formControlName="password">
+    </p>
+    <p>
+      <label for="registration-repPassword">Confirm Password: </label>
+      <input id="registration-repPassword" formControlName="repPassword">
+    </p>
+    <button type="submit">Registration</button>
+  </form>
+  <p>
+    <button (click)="setIsRegistration(false)">to Login</button>
+  </p>
+</div>
+
