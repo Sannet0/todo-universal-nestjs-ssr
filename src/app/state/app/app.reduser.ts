@@ -10,6 +10,6 @@ export const appReducer = createReducer(
     return {
       ...state,
       isDataLoad
-    }
+    };
   })
-)
+);

@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ITask } from '../interface/task-interface';
+import { ActivatedRoute } from '@angular/router';
+
 import { FilterType, TaskService } from '../services/task.service';
 import { AppService } from '../services/app.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -13,8 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class MainPageComponent implements OnInit {
   isDataLoad: boolean;
   isHTMLLoaded: boolean = isPlatformBrowser(this.platformId);
-  taskTemplate: any[] = [0, 1, 2, 3, 4, 5];
-  tasks: ITask[];
+  taskTemplate: number[] = [0, 1, 2, 3, 4, 5];
   filterType = FilterType;
   currentTaskName = '';
   isDataLoad$ = this.appService.isDataLoad$;
@@ -47,8 +46,13 @@ export class MainPageComponent implements OnInit {
   }
 
   clearCompletedTasks(): void {
-    this.taskService.setFilterType(FilterType.all);
-    this.taskService.deleteCompleted(this.listId);
+    this.taskCount$.subscribe(taskCount => {
+      this.taskService.deleteCompleted(this.listId);
+
+      if(taskCount === 0){
+        this.taskService.setFilterType(FilterType.all);
+      }
+    })
   }
 
   ngOnInit() {

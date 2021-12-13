@@ -22,22 +22,24 @@ import { NotfoundPageComponent } from './notfound-page/notfound-page.component';
   ],
   imports: [
     HttpClientModule,
-    BrowserModule.withServerTransition({appId: 'serverApp'}),
+    BrowserModule.withServerTransition({appId: 'my-app'}),
     TransferHttpCacheModule,
     StateModule,
     AppRoutingModule,
     AuthPageModule,
     MainPageModule,
-    FormsModule,
-    DashboardPageModule
+    DashboardPageModule,
+    FormsModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      multi: true,
-      useClass: AuthInterceptor
+      useClass: AuthInterceptor,
+      multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

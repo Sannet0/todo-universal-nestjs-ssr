@@ -8,7 +8,7 @@ export const loadLists = createAction(
 export const loadListsSuccess = createAction(
   '[List] Load lists success',
   props<{ lists: IList[] }>()
-)
+);
 
 export const addList = createAction(
   '[List] Add list',

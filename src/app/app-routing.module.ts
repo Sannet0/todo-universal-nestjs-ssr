@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainPageComponent } from './main-page/main-page.component';
-import { AuthPageComponent } from './auth-page/auth-page.component';
+
 import { AuthGuard } from './guards/auth.guard';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { NotfoundPageComponent } from './notfound-page/notfound-page.component';
+import { MainPageComponent } from './main-page/main-page.component';
+import { TaskItemComponent } from './main-page/task-item/task-item.component';
+import { AuthPageComponent } from './auth-page/auth-page.component';
+import { TaskItemSkeletonComponent } from './main-page/task-item-skeleton/task-item-skeleton.component';
+import { ListItemComponent } from './dashboard-page/list-item/list-item.component';
 
 const routes: Routes = [
   {
@@ -14,30 +18,37 @@ const routes: Routes = [
   },
   {
     path: 'list/:listId',
-    pathMatch: 'full',
     component: MainPageComponent,
+    children: [
+      { path: '', component: TaskItemComponent },
+      { path: '', component: TaskItemSkeletonComponent }
+    ],
     canActivate: [AuthGuard]
   },
   {
     path: 'dashboard',
-    pathMatch: 'full',
     component: DashboardPageComponent,
+    children: [
+      { path: '', component: ListItemComponent }
+    ],
     canActivate: [AuthGuard]
   },
   {
     path: 'notfound',
-    pathMatch: 'full',
     component: NotfoundPageComponent
   },
   {
     path: 'auth',
-    pathMatch: 'full',
     component: AuthPageComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    initialNavigation: 'enabledBlocking'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+

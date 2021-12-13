@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Task } from '../entitys/task.entity';
 import { ListService } from '../list/list.service';
 import { List } from '../entitys/list.entity';
@@ -9,18 +9,18 @@ import { List } from '../entitys/list.entity';
 export class TasksService {
   constructor(@InjectRepository(Task) private taskRepository: Repository<Task>, private readonly listService: ListService) {}
 
-  async getAllTasks(listId: string, userId: number): Promise<Task[] | any> {
+  async getAllTasks(listId: string, userId: number): Promise<Task[]> {
     if(await this.isUserHavList(listId, userId)) {
       return this.taskRepository.find({
         where: { listId },
-        order: { id: 'ASC' },
+        order: { id: 'ASC' }
       });
     }
 
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async deleteCompletedTask(listId: string, userId: number) {
+  async deleteCompletedTask(listId: string, userId: number): Promise<Task[]> {
     if(await this.isUserHavList(listId, userId)){
       const completeTasks: Task[] = await this.taskRepository.find({
         where: {
@@ -30,37 +30,26 @@ export class TasksService {
       });
       return this.taskRepository.remove(completeTasks);
     }
-
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async setAllComplete(listId: string, userId: number) {
+  async setAllComplete(listId: string, userId: number): Promise<UpdateResult> {
     if(await this.isUserHavList(listId, userId)){
-      // const property = await this.propertyRepository.findOne({
-      //   where: { id }
-      // });
-      //
-      // return this.propertyRepository.save({
-      //   ...property, // existing fields
-      //   ...updatePropertyDto // updated fields
-      // });
-      const property: any = await this.taskRepository.findOne({
+      const property: any = await this.taskRepository.find({
         where: {
           listId,
           isCompleted: false
         }
       });
-      return await this.taskRepository.update(property, { isCompleted: true })
-      //return await this.taskRepository.update({ isCompleted: false }, { isCompleted: true });
+      return await this.taskRepository.update(property, { isCompleted: true });
     }
-
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async isUserHavList(listId: string, userId: number){
+  async isUserHavList(listId: string, userId: number): Promise<boolean> {
     const allLists: List[] = await this.listService.getAll(userId);
     let isListFound = false;
-    allLists.forEach((list) => {
+    allLists.forEach((list: List) => {
       if(list.id.toString() === listId){
         isListFound = true;
       }

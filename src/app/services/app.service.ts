@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { isDataLoad } from '../state/app/app.selector';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
+import { isDataLoad } from '../state/app/app.selector';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,6 @@ export class AppService {
 
   logOut() {
     localStorage.setItem('token', '');
-    this.router.navigateByUrl('/auth');
+    this.router.navigate(['auth']).then();
   }
 }

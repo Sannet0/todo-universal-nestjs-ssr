@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { DashboardPageComponent } from './dashboard-page.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+
+import { DashboardPageComponent } from './dashboard-page.component';
 import { ListItemComponent } from './list-item/list-item.component';
-
-
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { ListItemComponent } from './list-item/list-item.component';
     ListItemComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule
   ],
   exports: [
     DashboardPageComponent

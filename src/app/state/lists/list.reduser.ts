@@ -13,13 +13,13 @@ export const listsReducer = createReducer(
     return {
       ...state,
       lists
-    }
+    };
   }),
   on(addListSuccess, (state, { list }) => {
     const newLists = [...state.lists, list];
     return {
       ...state,
       lists: newLists
-    }
+    };
   })
-)
+);

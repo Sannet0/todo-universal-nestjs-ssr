@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { ITask } from '../interface/task-interface';
+import { IList } from '../interface/list-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -34,19 +35,19 @@ export class ApiService {
     return this.httpService.delete(`list/${listId}/tasks/complete`);
   }
 
-  login(login: string, password: string): Observable<any> {
+  login(login: string, password: string): Observable<{ jwt: string }> {
     return this.httpService.post('user/login', { login, password });
   }
 
-  registration(login: string, password: string, repPassword: string): Observable<any> {
+  registration(login: string, password: string, repPassword: string): Observable<{ jwt: string }> {
     return this.httpService.post('user/registration', { login, password, repPassword });
   }
 
-  loadAllLists() {
+  loadAllLists(): Observable<IList[]> {
     return this.httpService.get('list');
   }
 
-  addNewList(title: string) {
+  addNewList(title: string): Observable<IList> {
     return this.httpService.post('list', { title });
   }
 }

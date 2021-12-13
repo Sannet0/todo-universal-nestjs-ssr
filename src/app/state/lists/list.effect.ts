@@ -18,16 +18,16 @@ export class ListEffect {
         map(lists => ListAction.loadListsSuccess({ lists }))
       )
     )
-  ))
+  ));
 
   newList$ = createEffect(() => this.actions$.pipe(
     ofType(ListAction.addList),
     mergeMap(({ title }) =>
       this.apiService.addNewList(title).pipe(
         map(list => {
-          return ListAction.addListSuccess({ list })
+          return ListAction.addListSuccess({ list });
         })
       )
     )
-  ))
+  ));
 }

@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ICreateTask } from '../interfaces/create-task-interface';
-import { IChangeTask } from '../interfaces/change-task-interface';
-import { ISetStatusTask } from '../interfaces/set-status-task-interface';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Task } from '../entitys/task.entity';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectRepository(Task) private taskRepository: Repository<Task>) {}
 
-  async createTask(task: ICreateTask) {
+  async createTask(task: {text: string; listId: number; userId: number;}): Promise<Task> {
     return await this.taskRepository.save(task);
   }
 
-  async deleteTask(task: IChangeTask) {
-    const {id} = task;
-    return await this.taskRepository.delete([id])
+  async deleteTask(task: { id: number; }): Promise<DeleteResult> {
+    return await this.taskRepository.delete([task.id]);
   }
 
-  async setTaskStatus(task: ISetStatusTask) {
-    const {isCompleted, id} = task;
+  async setTaskStatus(id: number, isCompleted: boolean): Promise<UpdateResult> {
     return await this.taskRepository.update([id], { isCompleted });
   }
 

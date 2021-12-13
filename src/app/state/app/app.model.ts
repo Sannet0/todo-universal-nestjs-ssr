@@ -4,4 +4,4 @@ export interface IAppState {
 
 export const initialState: IAppState = {
   isDataLoad: false
-}
+};

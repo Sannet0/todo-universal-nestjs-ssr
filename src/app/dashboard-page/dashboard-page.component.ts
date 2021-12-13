@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { IList } from '../interface/list-interface';
 import { ListService } from '../services/list.service';
 import { AppService } from '../services/app.service';
 

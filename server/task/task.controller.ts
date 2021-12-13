@@ -4,6 +4,8 @@ import { CreateTaskDto } from './dto/creating-task.dto';
 import { ChangeTaskDto } from './dto/change-task.dto';
 import { StatusTaskDto } from './dto/status-task.dto';
 import { JwtGuard } from '../guards/jwt.guard';
+import { Task } from '../entitys/task.entity';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @UseGuards(JwtGuard)
 @Controller('task')
@@ -11,17 +13,17 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  add(@Body() dto: CreateTaskDto, @Req() req: any) {
+  add(@Body() dto: CreateTaskDto, @Req() req: any): Promise<Task> {
     return this.taskService.createTask({ ...dto, userId: req.user.id });
   }
 
   @Delete(':id')
-  delete(@Param() dto: ChangeTaskDto) {
+  delete(@Param() dto: ChangeTaskDto): Promise<DeleteResult> {
     return this.taskService.deleteTask(dto);
   }
 
   @Patch(':id')
-  setStatus(@Param() paramDto: ChangeTaskDto, @Body() bodyDto: StatusTaskDto) {
-    return this.taskService.setTaskStatus({ id: paramDto.id, isCompleted: bodyDto.isCompleted });
+  setStatus(@Param() paramDto: ChangeTaskDto, @Body() bodyDto: StatusTaskDto): Promise<UpdateResult> {
+    return this.taskService.setTaskStatus(paramDto.id, bodyDto.isCompleted);
   }
 }

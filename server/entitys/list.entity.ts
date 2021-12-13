@@ -18,7 +18,7 @@ export class List {
   @Column()
   userId: number;
 
-  @OneToMany(() => Task, task => task.list, { eager: true, cascade: true})
-  tasks: Task[];
+  @OneToMany(() => Task, task => task.list)
+  tasks?: Task[];
 
 }

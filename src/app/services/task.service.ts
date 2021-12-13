@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
+import { Store } from '@ngrx/store';
+
 import { ITask } from '../interface/task-interface';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest } from 'rxjs';
@@ -11,7 +12,6 @@ import {
   loadTasks,
   selectAllTask
 } from '../state/tasks/tasks.actions';
-import { Store } from '@ngrx/store';
 import { tasks, tasksCount, tasksLeftCount } from '../state/tasks/tasks.selector';
 
 export enum FilterType {
@@ -65,6 +65,10 @@ export class TaskService {
     this.store.dispatch(deleteCompletedTask({ listId }));
   }
 
+  setFilterType(type: FilterType): void {
+    this.filterType$.next(type);
+  }
+
   private filterTasksExpression(task: ITask, type: FilterType): boolean {
     if (type === FilterType.all) {
       return true;
@@ -73,9 +77,5 @@ export class TaskService {
       return true;
     }
     return type === FilterType.active && !task.isCompleted;
-  }
-
-  setFilterType(type: FilterType): void {
-    this.filterType$.next(type);
   }
 }

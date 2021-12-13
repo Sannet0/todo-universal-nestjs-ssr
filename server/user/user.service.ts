@@ -1,45 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ICreateUser } from '../interfaces/create-user-interface';
 import { User } from '../entitys/user.entity';
-import { List } from '../entitys/list.entity';
 import { Repository } from 'typeorm';
-import { IUser } from '../interfaces/user-interface';
+import * as passwordHash from 'password-hash';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    private jwtService: JwtService,
-    @InjectRepository(User) private listRepository: Repository<List>
-  ) {
-  }
+    private jwtService: JwtService
+  ) {}
 
-  async registration(user: ICreateUser) {
+  async registration(user: { login: string; password: string; repPassword: string; }): Promise<{ jwt: string }> {
     const { login, password, repPassword } = user;
-
     try {
       if(password !== repPassword){
-        throw 'error';
+        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
-      const passwordHash = password + 'A';
+      const hash = passwordHash.generate(password);
 
       const newUser = await this.userRepository.save({
         login,
-        password: passwordHash
+        password: hash
       });
 
       const jwt = this.getJWT({ id: newUser.id, login: newUser.login });
 
-      return { jwt }
-    } catch (e) {
-      return { err: e };
+      return { jwt };
+    } catch (err) {
+      return err;
     }
   }
 
-  async login(user: IUser) {
+  async login(user: { login: string; password: string;}): Promise<{ jwt: string }> {
     const { login, password } = user;
 
     try {
@@ -48,39 +43,38 @@ export class UserService {
       });
 
       if(accurateUser === undefined){
-        throw 'no user';
+        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
-      const isPasswordCorrect = (password + 'A') === accurateUser.password;
+      const isPasswordCorrect = passwordHash.verify(password, accurateUser.password);
       if (isPasswordCorrect) {
         const jwt = this.getJWT({ id: accurateUser.id, login: accurateUser.login });
-        return { jwt }
+        return { jwt };
       }
 
-      throw 'error';
-    } catch (e) {
-      return { err: e };
+      throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+    } catch (err) {
+      return err;
     }
   }
 
-  async settings(user: { login: any }) {
+  async settings(login: string): Promise<{ user: { login: string } }> {
     try {
-      const { login } = user;
       const accurateUser = await this.userRepository.findOne({ where:
           { login }
       });
 
       if(accurateUser === undefined){
-        throw 'no user';
+        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
       return {
         user: {
           login: accurateUser.login
         }
-      }
-    } catch (e) {
-      return { err: e };
+      };
+    } catch (err) {
+      return err;
     }
 
   }

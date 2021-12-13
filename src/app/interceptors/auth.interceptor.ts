@@ -26,17 +26,17 @@ export class AuthInterceptor implements HttpInterceptor {
       tap(
         (event: any) => {
           if (event instanceof HttpResponse && this.router.url === '/auth'){
-            this.router.navigateByUrl('/dashboard');
+            this.router.navigate(['dashboard']).then();
           }
         },
         (err) => {
           if(err.status === 404) {
-            this.router.navigateByUrl('/notfound');
+            this.router.navigate(['notfound']).then();
           }
           if (err.status === 403) {
             alert('Session is over, please authorize');
             localStorage.setItem('token', '');
-            this.router.navigateByUrl('/auth');
+            this.router.navigate(['auth']).then();
           }
         }
       )

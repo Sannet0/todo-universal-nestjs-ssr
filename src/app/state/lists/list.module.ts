@@ -6,4 +6,4 @@ export interface IListState {
 
 export const initialState: IListState ={
   lists : []
-}
+};

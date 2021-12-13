@@ -9,7 +9,7 @@ import { TaskService } from '../../services/task.service';
 })
 export class TaskItemComponent {
   @Input() task: ITask;
-  isChecked: boolean = true;
+  isChecked = true;
 
   constructor(private taskService: TaskService) {}
 
