@@ -7,16 +7,16 @@ import { Task } from '../entitys/task.entity';
 export class TaskService {
   constructor(@InjectRepository(Task) private taskRepository: Repository<Task>) {}
 
-  async createTask(task: {text: string; listId: number; userId: number;}): Promise<Task> {
-    return await this.taskRepository.save(task);
+  async createTask(task: {text: string; listId: number; userId: number }): Promise<Task> {
+    return this.taskRepository.save(task);
   }
 
-  async deleteTask(task: { id: number; }): Promise<DeleteResult> {
-    return await this.taskRepository.delete([task.id]);
+  async deleteTask(task: { id: number }): Promise<DeleteResult> {
+    return this.taskRepository.delete([task.id]);
   }
 
   async setTaskStatus(id: number, isCompleted: boolean): Promise<UpdateResult> {
-    return await this.taskRepository.update([id], { isCompleted });
+    return this.taskRepository.update([id], { isCompleted });
   }
 
 }

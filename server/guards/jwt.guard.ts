@@ -9,9 +9,9 @@ export class JwtGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     try {
-      const authHeader = req.headers.authorization.split(' ');
-      const type = authHeader[0];
-      const token = authHeader[1];
+      const authHeader: string[] = req.headers.authorization.split(' ');
+      const type: string = authHeader[0];
+      const token: string = authHeader[1];
       const isJWTVerify = this.jwtService.verify(token);
 
       req.user = isJWTVerify;

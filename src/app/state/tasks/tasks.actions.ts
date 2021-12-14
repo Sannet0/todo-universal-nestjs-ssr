@@ -13,7 +13,7 @@ export const loadTasksSuccess = createAction(
 
 export const addTask = createAction(
   '[Tasks] Add task',
-  props<{ text: string, listId: number }>()
+  props<{ text: string; listId: number }>()
 );
 
 export const addTaskSuccess = createAction(

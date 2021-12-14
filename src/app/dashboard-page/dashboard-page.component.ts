@@ -27,7 +27,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.isHTMLLoaded){
+    if (this.isHTMLLoaded) {
       this.onInitOnBrowser();
     }
   }
@@ -35,5 +35,4 @@ export class DashboardPageComponent implements OnInit {
   onInitOnBrowser() {
     this.listService.loadAll();
   }
-
 }

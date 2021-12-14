@@ -5,7 +5,7 @@ import {
   loadListsSuccess
 } from './list.actions';
 
-export const listsStateKey  = 'lists';
+export const listsStateKey = 'lists';
 
 export const listsReducer = createReducer(
   initialState,

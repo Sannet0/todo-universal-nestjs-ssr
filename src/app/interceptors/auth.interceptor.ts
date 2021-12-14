@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
           }
         },
         (err) => {
-          if(err.status === 404) {
+          if (err.status === 404) {
             this.router.navigate(['notfound']).then();
           }
           if (err.status === 403) {

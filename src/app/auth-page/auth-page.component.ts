@@ -27,7 +27,7 @@ export class AuthPageComponent {
 
   login() {
     const { login, password } = this.loginForm.value;
-    if((login.trim() && password.trim())){
+    if ((login.trim() && password.trim())) {
       if ((!this.loginForm.controls['login'].invalid && !this.loginForm.controls['password'].invalid)) {
         this.loginForm.reset();
         this.authService.login(login.trim(), password.trim());
@@ -37,7 +37,7 @@ export class AuthPageComponent {
 
   registration() {
     const { login, password, repPassword } = this.registrationForm.value;
-    if((login.trim() && password.trim()) && repPassword.trim() === password.trim()){
+    if ((login.trim() && password.trim()) && repPassword.trim() === password.trim()) {
       if ((!this.registrationForm.controls['login'].invalid && !this.registrationForm.controls['password'].invalid && !this.registrationForm.controls['repPassword'].invalid)) {
         this.loginForm.reset();
         this.authService.registration(login.trim(), password.trim(), repPassword.trim());

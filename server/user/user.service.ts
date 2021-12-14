@@ -12,10 +12,10 @@ export class UserService {
     private jwtService: JwtService
   ) {}
 
-  async registration(user: { login: string; password: string; repPassword: string; }): Promise<{ jwt: string }> {
+  async registration(user: { login: string; password: string; repPassword: string }): Promise<{ jwt: string }> {
     const { login, password, repPassword } = user;
     try {
-      if(password !== repPassword){
+      if (password !== repPassword){
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
@@ -34,7 +34,7 @@ export class UserService {
     }
   }
 
-  async login(user: { login: string; password: string;}): Promise<{ jwt: string }> {
+  async login(user: { login: string; password: string }): Promise<{ jwt: string }> {
     const { login, password } = user;
 
     try {
@@ -42,11 +42,12 @@ export class UserService {
           { login }
       });
 
-      if(accurateUser === undefined){
+      if (accurateUser === undefined){
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 
       const isPasswordCorrect = passwordHash.verify(password, accurateUser.password);
+
       if (isPasswordCorrect) {
         const jwt = this.getJWT({ id: accurateUser.id, login: accurateUser.login });
         return { jwt };
@@ -64,7 +65,7 @@ export class UserService {
           { login }
       });
 
-      if(accurateUser === undefined){
+      if (accurateUser === undefined){
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
       }
 

@@ -10,18 +10,18 @@ export class UserController {
   }
 
   @Post('registration')
-  registration(@Body() dto: CreateUserDto): Promise<{ jwt: string }> {
+  async registration(@Body() dto: CreateUserDto): Promise<{ jwt: string }> {
     return this.userService.registration(dto);
   }
 
   @Post('login')
-  login(@Body() dto: UserDto): Promise<{ jwt: string }> {
+  async login(@Body() dto: UserDto): Promise<{ jwt: string }> {
     return this.userService.login(dto);
   }
 
   @UseGuards(JwtGuard)
   @Get('settings')
-  settings(@Req() req: any): Promise<{ user: { login: string } }> {
+  async settings(@Req() req: any): Promise<{ user: { login: string } }> {
     return this.userService.settings(req.user.login);
   }
 }

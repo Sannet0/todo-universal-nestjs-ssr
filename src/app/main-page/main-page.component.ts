@@ -49,14 +49,14 @@ export class MainPageComponent implements OnInit {
     this.taskCount$.subscribe(taskCount => {
       this.taskService.deleteCompleted(this.listId);
 
-      if(taskCount === 0){
+      if (taskCount === 0) {
         this.taskService.setFilterType(FilterType.all);
       }
-    })
+    });
   }
 
   ngOnInit() {
-    if(this.isHTMLLoaded){
+    if (this.isHTMLLoaded) {
       this.onInitOnBrowser();
     }
   }

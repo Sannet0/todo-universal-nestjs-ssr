@@ -13,17 +13,17 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  add(@Body() dto: CreateTaskDto, @Req() req: any): Promise<Task> {
+  async add(@Body() dto: CreateTaskDto, @Req() req: any): Promise<Task> {
     return this.taskService.createTask({ ...dto, userId: req.user.id });
   }
 
   @Delete(':id')
-  delete(@Param() dto: ChangeTaskDto): Promise<DeleteResult> {
+  async delete(@Param() dto: ChangeTaskDto): Promise<DeleteResult> {
     return this.taskService.deleteTask(dto);
   }
 
   @Patch(':id')
-  setStatus(@Param() paramDto: ChangeTaskDto, @Body() bodyDto: StatusTaskDto): Promise<UpdateResult> {
+  async setStatus(@Param() paramDto: ChangeTaskDto, @Body() bodyDto: StatusTaskDto): Promise<UpdateResult> {
     return this.taskService.setTaskStatus(paramDto.id, bodyDto.isCompleted);
   }
 }

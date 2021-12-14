@@ -10,17 +10,17 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getAll(@Param() param: { listId: string }, @Req() req: any): Promise<Task[]> {
+  async getAll(@Param() param: { listId: string }, @Req() req: any): Promise<Task[]> {
     return this.tasksService.getAllTasks(param.listId, req.user.id);
   }
 
   @Delete('complete')
-  deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<Task[]> {
+  async deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<Task[]> {
     return this.tasksService.deleteCompletedTask(param.listId, req.user.id);
   }
 
   @Patch('all')
-  setAllComplete(@Param() param: { listId: string }, @Req() req: any): Promise<UpdateResult> {
+  async setAllComplete(@Param() param: { listId: string }, @Req() req: any): Promise<UpdateResult> {
     return this.tasksService.setAllComplete(param.listId, req.user.id);
   }
 }

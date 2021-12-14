@@ -20,7 +20,7 @@ export class ListService {
     return lists;
   }
 
-  async createList(list: { title: string; userId: number; }): Promise<List> {
+  async createList(list: { title: string; userId: number }): Promise<List> {
     return this.listRepository.save(list);
   }
 

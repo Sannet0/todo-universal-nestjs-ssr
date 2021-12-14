@@ -18,7 +18,7 @@ export class TaskItemComponent {
   }
 
   onChangeCompletedStatus(id: number, event: Event): void {
-    if(this.isChecked){
+    if (this.isChecked) {
       this.isChecked = false;
       this.taskService.changeStatus(id, (event.target as HTMLInputElement).checked);
     }
