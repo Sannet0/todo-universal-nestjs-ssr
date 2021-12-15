@@ -26,7 +26,7 @@ export class UserService {
         password: hash
       });
 
-      const jwt = this.getJWT({ id: newUser.id, login: newUser.login });
+      const jwt = this.jwtService.sign({ id: newUser.id, login: newUser.login });
 
       return { jwt };
     } catch (err) {
@@ -34,13 +34,10 @@ export class UserService {
     }
   }
 
-  async login(user: { login: string; password: string }): Promise<{ jwt: string }> {
+  async login(user: { login: string; password: string }): Promise<{ jwt: string; rt: string }> {
     const { login, password } = user;
-
     try {
-      const accurateUser = await this.userRepository.findOne({ where:
-          { login }
-      });
+      const accurateUser = await this.findUserByLogin(login);
 
       if (accurateUser === undefined){
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
@@ -49,8 +46,11 @@ export class UserService {
       const isPasswordCorrect = passwordHash.verify(password, accurateUser.password);
 
       if (isPasswordCorrect) {
-        const jwt = this.getJWT({ id: accurateUser.id, login: accurateUser.login });
-        return { jwt };
+        const payload = { id: accurateUser.id, login: accurateUser.login };
+        return {
+          jwt: this.jwtService.sign(payload),
+          rt: this.jwtService.sign(payload, { expiresIn: '24h' })
+        };
       }
 
       throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
@@ -61,9 +61,7 @@ export class UserService {
 
   async settings(login: string): Promise<{ user: { login: string } }> {
     try {
-      const accurateUser = await this.userRepository.findOne({ where:
-          { login }
-      });
+      const accurateUser = await this.findUserByLogin(login);
 
       if (accurateUser === undefined){
         throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
@@ -77,10 +75,11 @@ export class UserService {
     } catch (err) {
       return err;
     }
-
   }
 
-  getJWT(payload = {}) {
-    return this.jwtService.sign(payload);
+  async findUserByLogin(login: string): Promise<User | undefined> {
+    return this.userRepository.findOne({ where:
+        { login }
+    });
   }
 }

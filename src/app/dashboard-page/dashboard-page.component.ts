@@ -19,10 +19,10 @@ export class DashboardPageComponent implements OnInit {
   ) {}
 
   addNew(): void {
-    this.listService.addNew('List');
+    this.listService.addNewList('List');
   }
 
-  logOut() {
+  logOut(): void {
     this.appService.logOut();
   }
 
@@ -32,7 +32,7 @@ export class DashboardPageComponent implements OnInit {
     }
   }
 
-  onInitOnBrowser() {
-    this.listService.loadAll();
+  onInitOnBrowser(): void {
+    this.listService.loadAllLists();
   }
 }

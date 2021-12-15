@@ -35,11 +35,11 @@ export class ApiService {
     return this.httpService.delete(`list/${listId}/tasks/complete`);
   }
 
-  login(login: string, password: string): Observable<{ jwt: string }> {
+  login(login: string, password: string): Observable<{ jwt: string; rt: string }> {
     return this.httpService.post('user/login', { login, password });
   }
 
-  registration(login: string, password: string, repPassword: string): Observable<{ jwt: string }> {
+  registration(login: string, password: string, repPassword: string): Observable<{ jwt: string; rt: string }> {
     return this.httpService.post('user/registration', { login, password, repPassword });
   }
 
@@ -49,5 +49,9 @@ export class ApiService {
 
   addNewList(title: string): Observable<IList> {
     return this.httpService.post('list', { title });
+  }
+
+  authWithRefToken(token: string): Observable<{ jwt: string; rt: string }> {
+    return this.httpService.patch('token', { token });
   }
 }

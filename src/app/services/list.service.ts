@@ -14,11 +14,11 @@ export class ListService {
 
   constructor(private store: Store<{ lists: IList[] }>) { }
 
-  loadAll() {
+  loadAllLists() {
     this.store.dispatch(loadLists());
   }
 
-  addNew(title: string) {
+  addNewList(title: string) {
     this.store.dispatch(addList({ title }));
   }
 }

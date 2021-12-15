@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AngularUniversalModule } from '@nestjs/ng-universal';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { AppServerModule } from '../src/main.server';
 import { TasksModule } from './tasks/tasks.module';
@@ -10,9 +11,16 @@ import { Task } from './entitys/task.entity';
 import { User } from './entitys/user.entity';
 import { List } from './entitys/list.entity';
 import { ListModule } from './list/list.module';
+import { configuration } from './config/configuration';
+import { JwtModule } from '@nestjs/jwt';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: `${process.cwd()}/config/env/${process.env.NODE_ENV}.env`,
+      load: [configuration]
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -25,13 +33,14 @@ import { ListModule } from './list/list.module';
       autoLoadEntities: true,
     }),
     AngularUniversalModule.forRoot({
-      bootstrap: AppServerModule,
-      viewsPath: join(process.cwd(), 'dist/my-app/browser')
+      viewsPath: join(process.cwd(), 'dist/my-app/browser'),
+      bootstrap: AppServerModule
     }),
     TaskModule,
     TasksModule,
     UserModule,
-    ListModule
+    ListModule,
+    TokensModule
   ],
 })
 export class AppModule {

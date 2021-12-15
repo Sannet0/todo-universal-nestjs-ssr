@@ -25,7 +25,7 @@ export class AuthPageComponent {
     repPassword: new FormControl('', [Validators.required, Validators.minLength(4)])
   });
 
-  login() {
+  login(): void {
     const { login, password } = this.loginForm.value;
     if ((login.trim() && password.trim())) {
       if ((!this.loginForm.controls['login'].invalid && !this.loginForm.controls['password'].invalid)) {
@@ -35,7 +35,7 @@ export class AuthPageComponent {
     }
   }
 
-  registration() {
+  registration(): void {
     const { login, password, repPassword } = this.registrationForm.value;
     if ((login.trim() && password.trim()) && repPassword.trim() === password.trim()) {
       if ((!this.registrationForm.controls['login'].invalid && !this.registrationForm.controls['password'].invalid && !this.registrationForm.controls['repPassword'].invalid)) {
@@ -45,7 +45,7 @@ export class AuthPageComponent {
     }
   }
 
-  setIsRegistration(bool: boolean) {
+  setIsRegistration(bool: boolean): void {
     this.isRegistration = bool;
   }
 

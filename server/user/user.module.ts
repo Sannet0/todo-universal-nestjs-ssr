@@ -11,11 +11,12 @@ import { User } from '../entitys/user.entity';
     JwtModule.register({
       secret: 'SECRET',
       signOptions: {
-        expiresIn: '24h'
+        expiresIn: '10s'
       }
     })
   ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
+  exports: [UserService]
 })
 export class UserModule {}

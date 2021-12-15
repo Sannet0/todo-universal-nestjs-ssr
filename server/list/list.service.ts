@@ -8,10 +8,7 @@ export class ListService {
   constructor(@InjectRepository(List) private listRepository: Repository<List>) {}
 
   async getAll(userId: number): Promise<List[]> {
-    const lists: List[] = await this.listRepository.find({
-      where: { userId },
-      order: { id: 'ASC' }
-    });
+    const lists: List[] = await this.listRepository.query(`SELECT * FROM LIST WHERE "userId" = ${ userId } ORDER BY id ASC`);
 
     lists.forEach((list: List) => {
       delete list.tasks;

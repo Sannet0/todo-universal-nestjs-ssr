@@ -35,7 +35,7 @@ export class TasksService {
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async setAllComplete(listId: string, userId: number): Promise<UpdateResult> {
+  async setAllCompleteTasks(listId: string, userId: number): Promise<UpdateResult> {
     const isUserHaveList = await this.isUserHavList(listId, userId);
     if (isUserHaveList) {
       const property: any = await this.taskRepository.find({
@@ -60,4 +60,5 @@ export class TasksService {
 
     return isListFound;
   }
+
 }

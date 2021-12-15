@@ -31,38 +31,38 @@ export class MainPageComponent implements OnInit {
 
   addNewTask(): void {
     if (this.currentTaskName.trim()) {
-      this.taskService.addNew(this.currentTaskName, this.listId);
+      this.taskService.addNewTask(this.currentTaskName, this.listId);
     }
     this.currentTaskName = '';
   }
 
   changeOptions(type: FilterType): void {
-    this.taskService.setFilterType(type);
+    this.taskService.setFilterTasksType(type);
   }
 
 
   selectAllTasks(): void {
-    this.taskService.selectAll(this.listId);
+    this.taskService.selectAllTask(this.listId);
   }
 
   clearCompletedTasks(): void {
     this.taskCount$.subscribe(taskCount => {
-      this.taskService.deleteCompleted(this.listId);
+      this.taskService.deleteCompletedTasks(this.listId);
 
       if (taskCount === 0) {
-        this.taskService.setFilterType(FilterType.all);
+        this.taskService.setFilterTasksType(FilterType.all);
       }
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.isHTMLLoaded) {
       this.onInitOnBrowser();
     }
   }
 
-  onInitOnBrowser() {
-    this.taskService.loadAll(this.listId);
+  onInitOnBrowser(): void {
+    this.taskService.loadAllTasks(this.listId);
     this.isDataLoad = true;
   }
 }

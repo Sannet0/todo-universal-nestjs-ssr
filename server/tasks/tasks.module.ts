@@ -12,7 +12,7 @@ import { ListModule } from '../list/list.module';
     JwtModule.register({
       secret: 'SECRET',
       signOptions: {
-        expiresIn: '24h'
+        expiresIn: '10s'
       }
     }),
     ListModule

@@ -21,6 +21,6 @@ export class TasksController {
 
   @Patch('all')
   async setAllComplete(@Param() param: { listId: string }, @Req() req: any): Promise<UpdateResult> {
-    return this.tasksService.setAllComplete(param.listId, req.user.id);
+    return this.tasksService.setAllCompleteTasks(param.listId, req.user.id);
   }
 }

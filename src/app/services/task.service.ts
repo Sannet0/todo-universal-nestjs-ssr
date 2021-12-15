@@ -41,15 +41,15 @@ export class TaskService {
   );
 
 
-  loadAll(listId: number): void {
+  loadAllTasks(listId: number): void {
     this.store.dispatch(loadTasks({ listId }));
   }
 
-  addNew(text: string, listId: number): void {
+  addNewTask(text: string, listId: number): void {
     this.store.dispatch(addTask({ text, listId }));
   }
 
-  changeStatus(id: number, isCompleted: boolean): void {
+  changeTaskStatus(id: number, isCompleted: boolean): void {
     this.store.dispatch(changeTaskStatus({ id, isCompleted }));
   }
 
@@ -57,15 +57,15 @@ export class TaskService {
     this.store.dispatch(deleteTask({ id }));
   }
 
-  selectAll(listId: number): void {
+  selectAllTask(listId: number): void {
     this.store.dispatch(selectAllTask({ listId }));
   }
 
-  deleteCompleted(listId: number): void {
+  deleteCompletedTasks(listId: number): void {
     this.store.dispatch(deleteCompletedTask({ listId }));
   }
 
-  setFilterType(type: FilterType): void {
+  setFilterTasksType(type: FilterType): void {
     this.filterType$.next(type);
   }
 
