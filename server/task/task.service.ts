@@ -8,15 +8,26 @@ export class TaskService {
   constructor(@InjectRepository(Task) private taskRepository: Repository<Task>) {}
 
   async createTask(task: {text: string; listId: number; userId: number }): Promise<Task> {
-    return this.taskRepository.save(task);
+    const createdTasks: Task[] = await this.taskRepository.query(`
+      INSERT INTO Tasks ("text", "listId", "userId") 
+      VALUES ('${ task.text }', ${ task.listId }, ${ task.userId }) 
+      RETURNING id, "text", "isCompleted"
+    `);
+    return createdTasks[0];
   }
 
   async deleteTask(task: { id: number }): Promise<DeleteResult> {
-    return this.taskRepository.delete([task.id]);
+    return this.taskRepository.query(`
+      DELETE FROM Tasks 
+      WHERE id = ${ task.id }
+    `);
   }
 
   async setTaskStatus(id: number, isCompleted: boolean): Promise<UpdateResult> {
-    return this.taskRepository.update([id], { isCompleted });
+    return this.taskRepository.query(`
+      UPDATE Tasks SET "isCompleted" = ${ isCompleted } 
+      WHERE id = ${ id } AND "isCompleted" = ${ !isCompleted }
+    `);
   }
 
 }

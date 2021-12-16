@@ -8,17 +8,20 @@ export class ListService {
   constructor(@InjectRepository(List) private listRepository: Repository<List>) {}
 
   async getAll(userId: number): Promise<List[]> {
-    const lists: List[] = await this.listRepository.query(`SELECT * FROM LIST WHERE "userId" = ${ userId } ORDER BY id ASC`);
-
-    lists.forEach((list: List) => {
-      delete list.tasks;
-    });
-
-    return lists;
+    return this.listRepository.query(`
+      SELECT id, "title" FROM List 
+      WHERE "userId" = ${ userId } 
+      ORDER BY id ASC
+    `);
   }
 
   async createList(list: { title: string; userId: number }): Promise<List> {
-    return this.listRepository.save(list);
+    const createdLists: List[] = await this.listRepository.query(`
+      INSERT INTO List ("title", "userId") 
+      VALUES ('${ list.title }', ${ list.userId }) 
+      RETURNING id, "title"
+    `);
+    return createdLists[0];
   }
 
 }

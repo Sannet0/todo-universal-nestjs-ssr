@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard } from './guards/auth.guard';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { NotfoundPageComponent } from './notfound-page/notfound-page.component';
 import { MainPageComponent } from './main-page/main-page.component';
@@ -22,16 +21,14 @@ const routes: Routes = [
     children: [
       { path: '', component: TaskItemComponent },
       { path: '', component: TaskItemSkeletonComponent }
-    ],
-    canActivate: [AuthGuard]
+    ]
   },
   {
     path: 'dashboard',
     component: DashboardPageComponent,
     children: [
       { path: '', component: ListItemComponent }
-    ],
-    canActivate: [AuthGuard]
+    ]
   },
   {
     path: 'notfound',

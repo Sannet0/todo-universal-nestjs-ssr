@@ -4,6 +4,6 @@ export interface IListState {
   lists: IList[];
 }
 
-export const initialState: IListState ={
+export const initialState: IListState = {
   lists : []
 };

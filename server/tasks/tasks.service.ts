@@ -12,25 +12,23 @@ export class TasksService {
   async getAllTasks(listId: string, userId: number): Promise<Task[]> {
     const isUserHaveList = await this.isUserHavList(listId, userId);
     if (isUserHaveList) {
-      return this.taskRepository.find({
-        where: { listId },
-        order: { id: 'ASC' }
-      });
+      return this.taskRepository.query(`
+        SELECT * FROM Tasks 
+        WHERE "listId" = '${ listId }' 
+        ORDER BY id ASC
+      `);
     }
 
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async deleteCompletedTask(listId: string, userId: number): Promise<Task[]> {
+  async deleteCompletedTask(listId: string, userId: number): Promise<any> {
     const isUserHaveList = await this.isUserHavList(listId, userId);
     if (isUserHaveList) {
-      const completeTasks: Task[] = await this.taskRepository.find({
-        where: {
-          listId,
-          isCompleted: true
-        },
-      });
-      return this.taskRepository.remove(completeTasks);
+      return this.taskRepository.query(`
+        DELETE FROM Tasks 
+        WHERE "listId" = '${ listId }' AND "isCompleted" = true
+      `);
     }
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
@@ -38,13 +36,11 @@ export class TasksService {
   async setAllCompleteTasks(listId: string, userId: number): Promise<UpdateResult> {
     const isUserHaveList = await this.isUserHavList(listId, userId);
     if (isUserHaveList) {
-      const property: any = await this.taskRepository.find({
-        where: {
-          listId,
-          isCompleted: false
-        }
-      });
-      return this.taskRepository.update(property, { isCompleted: true });
+      return this.taskRepository.query(`
+        UPDATE Tasks SET "isCompleted" = true 
+        WHERE "listId" = '${ listId }' 
+        AND "isCompleted" = false
+      `);
     }
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }

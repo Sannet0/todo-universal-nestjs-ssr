@@ -15,7 +15,7 @@ export class TasksController {
   }
 
   @Delete('complete')
-  async deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<Task[]> {
+  async deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<any> {
     return this.tasksService.deleteCompletedTask(param.listId, req.user.id);
   }
 

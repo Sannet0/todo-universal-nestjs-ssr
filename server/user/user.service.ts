@@ -12,7 +12,7 @@ export class UserService {
     private jwtService: JwtService
   ) {}
 
-  async registration(user: { login: string; password: string; repPassword: string }): Promise<{ jwt: string }> {
+  async registration(user: { login: string; password: string; repPassword: string }): Promise<{ jwt: string; rt: string }> {
     const { login, password, repPassword } = user;
     try {
       if (password !== repPassword){
@@ -21,14 +21,22 @@ export class UserService {
 
       const hash = passwordHash.generate(password);
 
-      const newUser = await this.userRepository.save({
-        login,
-        password: hash
-      });
+      const createdUsers: User[] = await this.userRepository.query(`
+        INSERT INTO Users ("login", "password") 
+        VALUES ('${ login }', '${ hash }') 
+        RETURNING id, "login"
+      `);
+      const newUser: User = createdUsers[0];
 
-      const jwt = this.jwtService.sign({ id: newUser.id, login: newUser.login });
+      if (newUser === undefined) {
+        throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+      }
 
-      return { jwt };
+      const payload = { id: newUser.id, login: newUser.login };
+      return {
+        jwt: this.jwtService.sign(payload),
+        rt: this.jwtService.sign(payload, { expiresIn: '24h' })
+      };
     } catch (err) {
       return err;
     }
@@ -78,8 +86,14 @@ export class UserService {
   }
 
   async findUserByLogin(login: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where:
-        { login }
-    });
+    try {
+      const user = await this.userRepository.query(`
+        SELECT * FROM Users
+        WHERE "login" = '${ login }'
+      `);
+      return user[0];
+    } catch (err) {
+      throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+    }
   }
 }
