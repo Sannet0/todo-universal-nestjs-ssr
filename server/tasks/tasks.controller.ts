@@ -2,7 +2,7 @@ import { Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/c
 import { TasksService } from './tasks.service';
 import { JwtGuard } from '../guards/jwt.guard';
 import { Task } from '../entitys/task.entity';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @UseGuards(JwtGuard)
 @Controller('list/:listId/tasks')
@@ -15,7 +15,7 @@ export class TasksController {
   }
 
   @Delete('complete')
-  async deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<any> {
+  async deleteCompleted(@Param() param: { listId: string }, @Req() req: any): Promise<DeleteResult> {
     return this.tasksService.deleteCompletedTask(param.listId, req.user.id);
   }
 

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Task } from '../entitys/task.entity';
 import { ListService } from '../list/list.service';
 import { List } from '../entitys/list.entity';
@@ -22,7 +22,7 @@ export class TasksService {
     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
   }
 
-  async deleteCompletedTask(listId: string, userId: number): Promise<any> {
+  async deleteCompletedTask(listId: string, userId: number): Promise<DeleteResult> {
     const isUserHaveList = await this.isUserHavList(listId, userId);
     if (isUserHaveList) {
       return this.taskRepository.query(`
